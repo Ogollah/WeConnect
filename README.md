@@ -7,18 +7,18 @@ WeConnect is an app that connects businesses and individuals together by creatin
 
 ## Features
 
-  User can create create a new account
-  User can log in and out of the account
-  Authenticated user can create a business for users to review
-  Authenticated user can post a review for a business
-  Business owner can read reviews about their business
-  Account owner with business can edit business profile and delete business
+  1. User can create create a new account
+  2. User can log in and out of the account
+  3. Authenticated user can create a business for users to review
+  4. Authenticated user can post a review for a business
+  5. Business owner can read reviews about their business
+  6. Account owner with business can edit business profile and delete business
 
 ## Framework and Language
 
- HTML
- CSS
- Bootstrap
- JavaScript/ES6/Reactjs
- Python/Flask
+ 1. HTML
+ 2. CSS
+ 3. Bootstrap
+ 4. JavaScript/ES6/Reactjs
+ 5. Python/Flask
 
