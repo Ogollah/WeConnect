@@ -1,11 +1,24 @@
 .navbar-brand p {
     font-family: Lobster;
+    color: blueviolet;
 }
 
 .jumbotron h2{
     font-family: Lobster;
+    color: blueviolet;
 }
 
 h3{
     font-family: Lobster;
+    color: blueviolet;
+}
+
+.bs-callout {
+    padding-left: 10px;
+    margin-left: 10px;
+}
+
+
+ul {
+    list-style: none;
 }
