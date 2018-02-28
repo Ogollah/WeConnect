@@ -27,6 +27,11 @@ h3{
     -webkit-border-radius: 50%
 }
 
+.jumbotron b{
+    font-family: Lobster;
+    color: blueviolet;
+}
+
 
 ul {
     list-style: none;
