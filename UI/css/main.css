@@ -36,3 +36,7 @@ h3{
 ul {
     list-style: none;
 }
+
+.list-group-item{
+    text-align: center;
+}
