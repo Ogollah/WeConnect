@@ -18,6 +18,15 @@ h3{
     margin-left: 10px;
 }
 
+.img-round{
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    line-height: 150px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%
+}
+
 
 ul {
     list-style: none;
