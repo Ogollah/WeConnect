@@ -1,5 +1,5 @@
 # WeConnect
-Andela Project Challage
+An App that help coneects people and businesses
 
 ## About
 
