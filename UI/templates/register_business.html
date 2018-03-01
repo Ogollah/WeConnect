@@ -49,30 +49,38 @@
               <div class="col-lg-12">
                 <div class="col-xs-12 col-sm-4">
                   <figure>
-                    <input type="file" name="img" accept="image/*">
-                    <input type="Upload">
-                    <label>About</label>
+                  <div class="fileUpload btn btn-primary">
+                    <span>Upload File</span>
+                    <input type="file" class="upload" />
+                  </div>
+                    </figure>
+                    <div><br>
+                    <label> <h3>About</h3></label>
                     <textarea class="form-control" name="abut" id="about" rows="5" 
-                      placeholder="Short note about your business"></textarea>
-                  </figure>
+                      placeholder="Short description about your business"></textarea>
+                    </div>
                 </div>
                 <div class="col-xs-12 col-sm-8">
                   <ul class="list-group">
                     <li>
                       <input class="form-control " id="cname" type="text" placeholder="Company Name" required="required">
                     </li>
+                    <br>
                     <li>
                       <input class="form-control " id="industry" type="text" placeholder="Industry" required="required">
                     </li>
-                    <li class="">
+                    <br>
+                    <li>
                       <input class="form-control " id="Location" type="text" placeholder="Location" required="required">
                     </li>
+                    <br>
                     <li>
                       <input class="form-control " id="email" type="email" placeholder="Email" required="required">
                     </li>
-                    <li align="right" class="list-group-item">
-                      <button type="submit" class="btn btn-default">Upload Details</button>
-                    </li>
+                    <br>
+                    
+                      <button type="submit" class="btn btn-info btn-block">Upload Details</button>
+                    
 
                   </ul>
                 </div>
@@ -84,6 +92,10 @@
     </div>
   </div>
 </div>
+
+  <div class="footer">
+    <p>&copy; 2018 WeConnect</p>
+  </div>
 </body>
 </html>
 

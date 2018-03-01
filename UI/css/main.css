@@ -32,7 +32,43 @@ h3{
     color: blueviolet;
 }
 
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #edeff7;
+    color: blueviolet;
+    text-align: center;
+}
 
 ul {
     list-style: none;
+}
+
+.list-group-item{
+    text-align: center;
+}
+
+.file-upload {
+    position: relative;
+    display: inline-block;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 0 ;
+}
+
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
 }
