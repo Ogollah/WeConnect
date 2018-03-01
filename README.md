@@ -1,5 +1,5 @@
 # WeConnect
-An App that help coneects people and businesses
+An App that help connect people and businesses
 
 ## About
 
