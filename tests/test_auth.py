@@ -1,6 +1,6 @@
 #app/tests/test_auth.py
 import unittest
-import json
+import jsonify
 from app import app
 
 #authentication testcases

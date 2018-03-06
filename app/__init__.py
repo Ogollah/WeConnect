@@ -1,3 +1,4 @@
+#app/__init__.py
 #Flask class from flask module
 from flask import Flask
 
