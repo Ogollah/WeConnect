@@ -1,18 +1,18 @@
 #app/tests/test_auth.py
 import unittest
-import jsonify
-from app import app
+import json
+import app
 
 #authentication testcases
 class AuthTestCase(unittest.TestCase):
-    
-    #test user registration
+    def setUp(self):
+        app.app.testing = True
+        self.app = app.app.test_client()
+        self.data = {'username':'manu', 'email':'manu@mail.com', 'password':'test123'}
+
     def test_user_registration(self):
-        user = Users()
-        response = user.register_user()
-            # convert the json response to an object
-        result = json.loads(response.data.decode())
-            # the user should be successfully registered
-        self.assertEqual(result['message'],
-                             'You have registered successfully!')
-        self.assertEqual(response.status_code, 201)
+        responce = self.app.post('/v1/user/auth/register', data=self.data)
+        result = json.loads(responce.data.decode())
+        self.assertEqual(responce.status_code, 201)
+        self.assertEqual(
+            result['message'], 'User {} was created'. format(self.data['username']))
