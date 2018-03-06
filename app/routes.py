@@ -19,9 +19,10 @@ class UserRegistration(Resource):
             email = data['email'],
             password = data['password']
         )
-        users = []
+        
+        #users = []
         try:
-            users.append(new_user)
+            User.users.append(new_user)
             response = {'message':'User {} was created'. format(data['username'])}
             return response, 201
 
