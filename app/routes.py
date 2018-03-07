@@ -11,20 +11,35 @@ parser.add_argument('email', help = 'This field cannot be blank', required = Tru
 parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
 
+users = []
 class UserRegistration(Resource):
+
     def post(self):
         data = parser.parse_args()
-        new_user = User(
-            username = data['username'],
-            email = data['email'],
-            password = data['password']
-        )
+        username = data['username'],
+        email = data['email'],
+        password = data['password']
         
-        #users = []
-        try:
-            User.users.append(new_user)
-            response = {'message':'User {} was created'. format(data['username'])}
-            return response, 201
+        user_nam = [User.username for User in users]
+        print(user_nam)
+        print(user_nam)
+        
+        if username in user_nam:
+                response = {'message': 'User {} was created'.format(data['username'])}
+                return response, 202
+        else:
+            try:
+                new_user = User(
+                    username=username,
+                    email=email,
+                    password=password
+                )
+                users.append(new_user)
+                response = {'message':'User {} was created'. format(data['username'])}
+                return response, 201
 
-        except:
-            return {'message':'Something went wrong'}, 500
+            except:
+                return {'message':'Something went wrong'}, 500
+
+            
+
