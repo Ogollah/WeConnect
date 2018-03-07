@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Ogollah/WeConnect.svg?branch=develop)](https://travis-ci.org/Ogollah/WeConnect)
 # WeConnect
 An App that help connect people and businesses
 
