@@ -50,7 +50,6 @@ class UserLogin(Resource):
 
         current_user = [User.username for User in users]
         current_password = [User.password for User in users]
-        current_email = [User.email for User in users]
       #  print(current_user)
        # print(current_password)
         if username in current_user and password in current_password:
@@ -78,6 +77,13 @@ class UserLogout(Resource):
             response = {'message': 'Logged out successfully'}
             return response, 200
 
+
+class UserResetPassword(Resource):
+    def post(self):
+        data = parser.parse_args()
+        username = data['username']
+        email = data['email']
+        password = data['password']
         
 
             

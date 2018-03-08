@@ -95,4 +95,14 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result['message'], "Logged out successfully")
 
+    def test_user_reset_password(self):
+        """Test user can reset password. """
+        response = self.app.post('/v1/user/auth/reset-password', data=self.data_5)
+        # get the result in json
+        result = json.loads(response.data.decode())
+        # and an error status code 200
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result['message'], "Password reset successfully")
+
+
 
