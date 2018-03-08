@@ -11,6 +11,7 @@ class AuthTestCase(unittest.TestCase):
         self.data_2 = {'username':'tito', 'email':'lawi@mail.com', 'password':'test123'}
         self.data_3 = {'username':'ribo', 'email':'riwi@mail.com', 'password':'testtest'}
         self.data_4 = {'username':'kiwi', 'email':'kiwi@mail.com', 'password':'sart'}
+        self.data_5 = {'username':'colo', 'email':'colo@mail.com', 'password':'small12'}
         
 
     def test_user_registration(self):
@@ -80,5 +81,18 @@ class AuthTestCase(unittest.TestCase):
         # and an error status code 401(Unauthorized)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result['message'], "Invalid username or password, Please try again")
+
+
+    def test_user_logout(self):
+        """Test user can logout the account. """
+        response = self.app.post('/v1/user/auth/register', data=self.data_5)
+        self.assertEqual(response.status_code, 201)
+        response = self.app.post('/v1/user/auth/login', data=self.data_5)
+        response = self.app.post('/v1/user/auth/logout', data=self.data_5)
+        # get the result in json
+        result = json.loads(response.data.decode())
+        # and an error status code 200
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result['message'], "Logged out successfully")
 
 
