@@ -16,17 +16,16 @@ class UserRegistration(Resource):
 
     def post(self):
         data = parser.parse_args()
-        username = data['username'],
-        email = data['email'],
+        username = data['username']
+        email = data['email']
         password = data['password']
         
         user_nam = [User.username for User in users]
-        print(user_nam)
-        print(user_nam)
         
         if username in user_nam:
-                response = {'message': 'User {} was created'.format(data['username'])}
-                return response, 202
+            print(username)
+            response = {'message': 'User {} is available'.format(data['username'])}
+            return response, 202
         else:
             try:
                 new_user = User(
@@ -40,6 +39,29 @@ class UserRegistration(Resource):
 
             except:
                 return {'message':'Something went wrong'}, 500
+
+
+class UserLogin(Resource):
+    def post(self):
+        data = parser.parse_args()
+        username = data['username']
+        email = data['email']
+        password = data['password']
+
+        current_user = [User.username for User in users]
+        current_password = [User.password for User in users]
+        current_email = [User.email for User in users]
+        print(current_user)
+        print(current_email)
+        print(current_password)
+        if username in current_user and password in current_password:
+            print(username, password)
+            response = {'message': 'User {} logged in successfully' .format(data['username'])}
+            return response
+        else:
+            response = {'message': "Invalid username or password, Please try again"}
+            return response, 401
+        
 
             
 

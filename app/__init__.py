@@ -10,4 +10,5 @@ from app import models, routes
 
 
 api.add_resource(routes.UserRegistration, '/v1/user/auth/register')
+api.add_resource(routes.UserLogin, '/v1/user/auth/login')
 
