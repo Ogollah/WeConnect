@@ -89,8 +89,6 @@ class AuthTestCase(unittest.TestCase):
         response = self.app.post('/v1/user/auth/logou', data=self.data_5)
         # get the result in json
         result = json.loads(response.data.decode())
-
-        # assert that this response must contain an error message
         # and an error status code 200
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result['message'], "Logged out successfuly")
