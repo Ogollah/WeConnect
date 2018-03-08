@@ -51,9 +51,8 @@ class UserLogin(Resource):
         current_user = [User.username for User in users]
         current_password = [User.password for User in users]
         current_email = [User.email for User in users]
-        print(current_user)
-        print(current_email)
-        print(current_password)
+      #  print(current_user)
+       # print(current_password)
         if username in current_user and password in current_password:
             print(username, password)
             response = {'message': 'User {} logged in successfully' .format(data['username'])}
@@ -63,9 +62,22 @@ class UserLogin(Resource):
             return response, 401
 
 
-class UserLogoutRefresh(Resource):
+class UserLogout(Resource):
     def post(self):
-        return {'message': 'Logged out successfully'}
+        data = parser.parse_args()
+        username = data['username']
+        email = data['email']
+        password = data['password']
+
+        current_user = [User.username for User in users]
+        current_password = [User.password for User in users]
+        print(current_user)
+        print(current_password)
+        
+        if username in current_user and password in current_password:
+            response = {'message': 'Logged out successfully'}
+            return response, 200
+
         
 
             
