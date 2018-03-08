@@ -10,6 +10,7 @@ class AuthTestCase(unittest.TestCase):
         self.data = {'username':'monu', 'email':'fra@mail.com', 'password':'test123'}
         self.data_2 = {'username':'tito', 'email':'lawi@mail.com', 'password':'test123'}
         self.data_3 = {'username':'ribo', 'email':'riwi@mail.com', 'password':'testtest'}
+        self.data_4 = {'username':'kiwi', 'email':'kiwi@mail.com', 'password':'sart'}
         
 
     def test_user_registration(self):
@@ -56,5 +57,28 @@ class AuthTestCase(unittest.TestCase):
 
         # assert that this response must contain an error message 
         # and an error status code 401(Unauthorized)
+        self.assertEqual(response.status_code, 401)       
+        self.assertEqual(result['message'], "Invalid username or password, Please try again")
+
+    
+    def test_user_wrong_password(self):
+        """Test registered user cannot login with a wrong password"""
+        response = self.app.post('/v1/user/auth/register', data=self.data_4)
+        self.assertEqual(response.status_code, 201)
+
+        user_no_pass = {
+            'username': 'kiwi',
+            'email': 'kiwi@mail.com',
+            'password': 'not-applicable'
+        }
+
+        response = self.app.post('/v1/user/auth/login', data=user_no_pass)
+        # get the result in json
+        result = json.loads(response.data.decode())
+
+        # assert that this response must contain an error message
+        # and an error status code 401(Unauthorized)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result['message'], "Invalid username or password, Please try again")
+
+
