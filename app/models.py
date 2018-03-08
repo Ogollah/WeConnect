@@ -6,5 +6,7 @@ class User():
         self.email = email
         self.password = password
 
+    def resetPassword(self, reset_password):
+        self.password = reset_password
         
         
