@@ -61,6 +61,11 @@ class UserLogin(Resource):
         else:
             response = {'message': "Invalid username or password, Please try again"}
             return response, 401
+
+
+class UserLogoutRefresh(Resource):
+    def post(self):
+        return {'message': 'Logged out successfully'}
         
 
             
