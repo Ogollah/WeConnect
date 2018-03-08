@@ -54,13 +54,13 @@ class UserLogin(Resource):
         print(current_user)
         print(current_email)
         print(current_password)
-        if username in current_user and password in current_password and email in current_email:
+        if username in current_user and password in current_password:
             print(username, password)
             response = {'message': 'User {} logged in successfully' .format(data['username'])}
             return response
         else:
             response = {'message': "Invalid username or password, Please try again"}
-            return response
+            return response, 401
         
 
             
