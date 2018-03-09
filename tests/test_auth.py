@@ -21,7 +21,7 @@ class AuthTestCase(unittest.TestCase):
         responce = self.app.post('/app/v1/user/auth/register', data=self.data_2)
         result = json.loads(responce.data.decode())
         self.assertEqual(responce.status_code, 201)
-        self.assertEqual(result['message'], 'User {} was created'. format(self.data_2['username']))
+        self.assertEqual(result['message'], 'User {} created successfully'. format(self.data_2['username']))
 
     def test_user_already_registered(self):
         """Test user can only register once. """     
@@ -31,7 +31,7 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(second_response.status_code, 202)
         # get the results returned in json format
         result = json.loads(second_response.data.decode())
-        self.assertEqual(result['message'], 'User {} is available'.format(self.data['username']))
+        self.assertEqual(result['message'], 'Username {} already taken'.format(self.data['username']))
 
     def test_user_login(self):
         """Test registered user can login."""
@@ -45,9 +45,9 @@ class AuthTestCase(unittest.TestCase):
         #self.assertTrue(result['access_token'])
 
     def test_non_registered_user(self):
+        """Test non register user cannot login"""
         response = self.app.post('/app/v1/user/auth/register', data=self.data_3)
         self.assertEqual(response.status_code, 201)
-        """Test non register user cannot login"""
         non_user = {
             'username':'non',
             'password':'not-applicable'
@@ -107,6 +107,4 @@ class AuthTestCase(unittest.TestCase):
         # and an error status code 200
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result['message'], "Password reset successfully")
-
-
 

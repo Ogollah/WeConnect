@@ -17,11 +17,11 @@ WeConnect is an app that connects businesses and individuals together by creatin
 
   | EndPoint                                             | Functionality                                    |
 | ---------------------------------------------------- | ------------------------------------------------ |
-| POST   /api/v1/user/auth/register                   | Creates a user account                          |
-| POST   /api/v1/user/auth/login                       | Logs in a user                                 |
-| POST   /api/v1/user/auth/logout                      | Logs out a user                                |
-| POST   /api/v1/user/auth/resetPassword              | Password reset                                 |
-| POST   /api/v1/businesses                       | Register a business                            |
+| POST   /app/v1/user/auth/register                   | Creates a user account                          |
+| POST   /app/v1/user/auth/login                       | Logs in a user                                 |
+| POST   /app/v1/user/auth/logout                      | Logs out a user                                |
+| POST   /app/v1/user/auth/resetPassword              | Password reset                                 |
+| POST   /app/v1/businesses/registration                       | Register a business                            |
 
 ## Technologies
 
