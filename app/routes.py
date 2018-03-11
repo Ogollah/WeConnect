@@ -1,7 +1,8 @@
 #app/routes.py
-from flask import Flask, Response
+from flask import Flask, Response, jsonify
 from app import app
-from app.models import User, Business
+from app.models import User
+from app.business import Business
 import json
 from flask_restful import Resource,reqparse
 
@@ -24,18 +25,16 @@ parser_reset.add_argument('new_pass', help = 'This field cannot be blank', requi
 
 #parser for creating business
 parser_business = reqparse.RequestParser()
-parser_business.add_argument('business_id', help = 'This field cannot be blank', required = True)
 parser_business.add_argument('business_name', help = 'This field cannot be blank', required = True)
 parser_business.add_argument('industry', help = 'This field cannot be blank', required = True)
 parser_business.add_argument('location', help = 'This field cannot be blank', required = True)
-parser_business.add_argument('business_email', help = 'This field cannot be blank', required = True)
+parser_business.add_argument('email', help = 'This field cannot be blank', required = True)
 parser_business.add_argument('about', help='This field cannot be blank', required=True)
-parser_business.add_argument('user_id', help='This field cannot be blank', required=True)
-parser_business.add_argument('review_id', help = 'This field cannot be blank', required = True)
 
 
 users = []
 businesses = []
+#business_details = {}
 class UserRegistration(Resource):
 
     def post(self):
@@ -108,35 +107,36 @@ class UserResetPassword(Resource):
 class BusinessRegistration(Resource):
     def post(self):
         data = parser_business.parse_args()
-        business_id = data['business_id']
         business_name = data['business_name']
         industry = data['industry']
         location = data['location']
-        business_email = data['business_email']
+        email = data['email']
         about = data['about']
-        user_id = data['user_id']
-        review_id = data['review_id']
-        
-        business_list = [Business.business_name for Business in businesses]  
-        if business_name in business_list:
-            
+        #List all available business        
+        business_list = [x.business_name for x in businesses]
+        #check if business name is available in the business list
+        if business_name in business_list:           
             response = {'message': '{} exists'.format(data['business_name'])}
             return response, 202
         else:
-            try:
-                new_business = Business(
-                    business_id = business_id,
-                    business_name = business_name,
-                    industry = industry,
-                    location = location,
-                    business_email = business_email,
-                    about = about,
-                    user_id = user_id,
-                    review_id = review_id
-                )
-                businesses.append(new_business)
-                response = {'message': '{} successfully created'. format(data['business_name'])}
-                return response, 201
+            new_business = Business(
+                business_name,
+                industry,
+                location,
+                email,
+                about
+            )
+            #create and append new business in businesses
+            businesses.append(new_business)
+            response = {'message': '{} successfully created'. format(data['business_name'])}          
+            return response, 201
 
-            except:
-                return {'message':'Something went wrong'}, 500
+    
+#get all available business list
+class AllBusiness(Resource):
+    """View all avilable businesses"""
+    def get(self):
+        mybusinesses = [{x.business_id : [x.business_name, x.industry, x.location, x.email] for x in businesses}]
+        return {"Business Catalog" : mybusinesses}, 200
+
+    
