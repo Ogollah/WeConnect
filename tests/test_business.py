@@ -34,3 +34,15 @@ class BusinessTestCase(unittest.TestCase):
         response = self.app.get('/app/v1/business/businesses', data=self.data_business)
         self.assertEqual(response.status_code, 200)
 
+    def test_view_business_by_id(self):
+        """Test get a single business by id."""
+        response = self.app.get('/app/v1/business/1', data=self.data_business)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_business_by_id(self):
+        """Test delete a single business by id."""
+        response = self.app.delete('/app/v1/business/1', data=self.data_business)
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result['message'], 'Business successfully deleted!')
+

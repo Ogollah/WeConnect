@@ -14,5 +14,5 @@ api.add_resource(routes.UserLogout, '/app/v1/user/auth/logout')
 api.add_resource(routes.UserResetPassword, '/app/v1/user/auth/resetPassword')
 api.add_resource(routes.BusinessRegistration, '/app/v1/business/registration')
 api.add_resource(routes.AllBusiness,'/app/v1/business/businesses')
-#api.add_resource(routes.GetABusiness, '/app/v1/business/<int:business_id>/')
+api.add_resource(routes.GetBusinessById, '/app/v1/business/<int:business_id>')
 

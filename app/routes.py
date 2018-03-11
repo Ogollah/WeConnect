@@ -139,4 +139,18 @@ class AllBusiness(Resource):
         mybusinesses = [{x.business_id : [x.business_name, x.industry, x.location, x.email] for x in businesses}]
         return {"Business Catalog" : mybusinesses}, 200
 
-    
+class GetBusinessById(Resource):
+    """view business by business id"""
+    def get(self, business_id):
+        myBusiness = [x for x in businesses if x.business_id == business_id]
+        if myBusiness:
+            myBusiness = myBusiness[0]
+            return {"Business Name": myBusiness.business_name, "Industry": myBusiness.industry, "Location": myBusiness.location, "Business email": myBusiness.email}, 200
+        else:
+            return {'message': 'Business you are looking for is not available'}, 404
+
+    def delete(self, business_id):
+        myBusiness = [x for x in businesses if x.business_id == business_id]
+        if myBusiness:
+            del myBusiness[0]
+            return {'message':'Business successfully deleted!'}
