@@ -31,7 +31,6 @@ parser_business.add_argument('location', help = 'This field cannot be blank', re
 parser_business.add_argument('email', help = 'This field cannot be blank', required = True)
 parser_business.add_argument('about', help='This field cannot be blank', required=True)
 
-
 users = []
 businesses = []
 #business_details = {}
@@ -154,3 +153,16 @@ class GetBusinessById(Resource):
         if myBusiness:
             del myBusiness[0]
             return {'message':'Business successfully deleted!'}
+
+    def put(self, business_id):
+        data = parser_business.parse_args()
+        newname = data['business_name']
+        newindustry = data['industry']
+        newlocation = data['location']
+        newemail = data['email']
+        newabout = data['about']
+
+        myBusiness = [x for x in businesses if x.business_id == business_id]
+        if myBusiness:
+            myBusiness[0].update_business(newname, newindustry, newlocation, newemail, newabout)
+            return {"message": "Business succcessfully updated!", }, 201

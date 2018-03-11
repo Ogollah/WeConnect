@@ -15,12 +15,12 @@ class BusinessTestCase(unittest.TestCase):
                     "email": "info@pinetech.com",
                     "about": "Super cool!"}
 
-        # #self.data_business2 = {
-        #             "business_name": "Swiftnet",
-        #             "industry": "Netwrking",
-        #             "location": "Kisumu",
-        #             "business_email": "info@swiftnet.com",
-        #             "about": "All you need for networking!"}
+        self.data_business1 = {
+                    "business_name": "Swiftnet",
+                    "industry": "Netwrking",
+                    "location": "Kisumu",
+                    "email": "info@swiftnet.com",
+                    "about": "All you need for networking!"}
 
     def test_business_registration(self):
         """Test business registration."""
@@ -45,4 +45,13 @@ class BusinessTestCase(unittest.TestCase):
         result = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result['message'], 'Business successfully deleted!')
+
+    def test_user_reset_password(self):
+        """Test user can reset password. """
+        response = self.app.put('/app/v1/business/1', data=self.data_business1)
+        #get the result in json
+        result = json.loads(response.data.decode())
+        # status code 200
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(result['message'], "Business succcessfully updated!")
 
