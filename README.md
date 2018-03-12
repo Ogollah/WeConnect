@@ -1,4 +1,8 @@
 [![Build Status](https://travis-ci.org/Ogollah/WeConnect.svg?branch=develop)](https://travis-ci.org/Ogollah/WeConnect)
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/d26d3f22320cf60e59ce/maintainability)](https://codeclimate.com/github/Ogollah/WeConnect/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d26d3f22320cf60e59ce/test_coverage)](https://codeclimate.com/github/Ogollah/WeConnect/test_coverage)
 # WeConnect
 An App that help connect people and businesses
 

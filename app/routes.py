@@ -185,3 +185,6 @@ class BusinessReview(Resource):
             response = {"Business Review": "{}".format(data['review'])}
             return response, 201
             
+    def get(self, business_id):
+        myReviews = [{x.review_id:[x.review] for x in reviews}]
+        return {'Reviews': myReviews}, 200
