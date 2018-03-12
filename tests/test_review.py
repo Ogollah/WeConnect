@@ -22,6 +22,13 @@ class ReviewTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(result['Business Review'], '{}'. format(self.data_review['review']))
 
+    def test_review_business_twice(self):
+        """Test user cannot review a business twice"""
+        response = self.app.post('/app/v1/business/1/reviews', data=self.data_review)
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result['message'], 'You have already reviewed the business')
+
     def test_view_all_business_review(self):
         """Test view all business review."""
         response = self.app.get('/app/v1/business/1/reviews', data=self.data_review)
