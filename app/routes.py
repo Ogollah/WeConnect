@@ -3,6 +3,7 @@ from flask import Flask, Response, jsonify
 from app import app
 from app.models import User
 from app.business import Business
+from app.review import Review
 import json
 from flask_restful import Resource,reqparse
 
@@ -31,9 +32,13 @@ parser_business.add_argument('location', help = 'This field cannot be blank', re
 parser_business.add_argument('email', help = 'This field cannot be blank', required = True)
 parser_business.add_argument('about', help='This field cannot be blank', required=True)
 
+#parser for creating business review
+parser_review = reqparse.RequestParser()
+parser_review.add_argument('review', help = 'This field cannot be blank', required = True)
+parser_review.add_argument('business_id', help = 'This field cannot be blank', required = True)
 users = []
 businesses = []
-#business_details = {}
+reviews = []
 class UserRegistration(Resource):
 
     def post(self):
@@ -166,3 +171,17 @@ class GetBusinessById(Resource):
         if myBusiness:
             myBusiness[0].update_business(newname, newindustry, newlocation, newemail, newabout)
             return {"message": "Business succcessfully updated!", }, 201
+class BusinessReview(Resource):
+    def post(self, business_id):
+        data = parser_review.parse_args()
+        review = data['review']
+        business_id = data['business_id']
+        business_review = [x.review for x in reviews]
+        if review in business_review:
+            return {'message': 'You have already reviewed the business'}
+        else:
+            new_review = Review(review, business_id)
+            reviews.append(new_review)
+            response = {"Business Review": "{}".format(data['review'])}
+            return response, 201
+            
