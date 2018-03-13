@@ -1,0 +1,12 @@
+Endpoint that view all businesses
+---
+tags:
+  - Business
+responses:
+  200:
+    description: List of created businesses
+    schema:
+      type: object
+      properties:
+        businesses:
+          type: A List

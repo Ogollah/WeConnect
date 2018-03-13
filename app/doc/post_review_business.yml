@@ -1,0 +1,44 @@
+Endpoint that posts a business review
+---
+tags:
+  - Business
+parameters:
+  - name: business_id
+    description: business id
+    type: integer
+    in: path
+    required: true
+  - name: body
+    description: business review data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "business_id"
+        - "review"
+      properties:
+        name:
+          type: "integer"
+          example: 1
+        description:
+          type: "string"
+          example: "Value for money"
+responses:
+  201:
+    description: Business review added
+    schema:
+      type: object
+      properties:
+        business:
+          type: array of business details
+
+  409:
+    description: Business already exists
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "You have already reviewed the business"
