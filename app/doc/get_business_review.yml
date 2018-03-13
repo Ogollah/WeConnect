@@ -1,0 +1,18 @@
+Endpoint that retrieves a business' reviews
+---
+tags:
+  - Business
+parameters:
+  - name: business_id
+    description: business id
+    type: integer
+    in: path
+    required: true
+responses:
+  200:
+    description: A business review
+    schema:
+      type: object
+      properties:
+        reviews:
+          type: array

@@ -1,0 +1,46 @@
+Endpoint that creates a user
+---
+tags:
+  - User
+parameters:
+  - name: body
+    description: user registration data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "username"
+        - "email"
+        - "password"
+      properties:
+        username:
+          type: "string"
+          example: "manu"
+        email:
+          type: "string"
+          example: "manu@mail.com"
+        password:
+          type: "string"
+          format: password
+          example: "test123"
+
+responses:
+  201:
+    description: User added
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "User {manu} created successfully'"
+  409:
+    description: User already exists
+    schema: 
+      type: object
+      properties:
+        message:
+          type: string
+          enum:
+            - "Username {manu} already taken"
