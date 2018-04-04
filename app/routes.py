@@ -43,7 +43,7 @@ reviews = []
 
 
 class UserRegistration(Resource):
-    @swag_from('doc/post_user.yml')
+    @swag_from('docs/post_user.yml')
     def post(self):
         data = parser.parse_args()
         username = data['username']
@@ -71,7 +71,7 @@ class UserRegistration(Resource):
 
 
 class UserLogin(Resource):
-    @swag_from('doc/login_user.yml')
+    @swag_from('docs/login_user.yml')
     def post(self):
         data = parser_login.parse_args()
         username = data['username']    
@@ -89,7 +89,7 @@ class UserLogin(Resource):
             return response, 401
 
 class UserLogout(Resource):
-    @swag_from('doc/logout_user.yml')
+    @swag_from('docs/logout_user.yml')
     def post(self):
         data = parser_login.parse_args()
         username = data['username']
@@ -102,7 +102,7 @@ class UserLogout(Resource):
             return {'message': 'Something went wrong'}, 500
 
 class UserResetPassword(Resource):
-    @swag_from('doc/reset_password.yml')
+    @swag_from('docs/reset_password.yml')
     def post(self):
         data = parser_reset.parse_args()
         username = data['username']
@@ -115,11 +115,9 @@ class UserResetPassword(Resource):
             return response, 200
         else:
             return {'message':'User not found'}, 400
-        
-            
-            
+             
 class BusinessRegistration(Resource):
-    @swag_from('doc/register_business.yml')
+    @swag_from('docs/register_business.yml')
     def post(self):
         data = parser_business.parse_args()
         business_name = data['business_name']
@@ -150,14 +148,14 @@ class BusinessRegistration(Resource):
 #get all available business list
 class AllBusiness(Resource):
     """View all avilable businesses"""
-    @swag_from('doc/view_all_business.yml')
+    @swag_from('docs/view_all_business.yml')
     def get(self):
         mybusinesses = [{x.business_id : [x.business_name, x.industry, x.location, x.email] for x in businesses}]
         return {"Business Catalog" : mybusinesses}, 200
 
 class GetBusinessById(Resource):
     """view business by business id"""
-    @swag_from('doc/get_businesses.yml')
+    @swag_from('docs/get_businesses.yml')
     def get(self, business_id):
         myBusiness = [x for x in businesses if x.business_id == business_id]
         if myBusiness:
@@ -167,7 +165,7 @@ class GetBusinessById(Resource):
         else:
             return {'message' :'Business not found'}, 404
 
-    @swag_from('doc/delete_businesses.yml')
+    @swag_from('docs/delete_businesses.yml')
     def delete(self, business_id):
         myBusiness = [x for x in businesses if x.business_id == business_id]
         if myBusiness:
@@ -176,7 +174,7 @@ class GetBusinessById(Resource):
         else:
             return {'message': 'Business not found'}, 404
 
-    @swag_from('doc/update_business.yml')
+    @swag_from('docs/update_business.yml')
     def put(self, business_id):
         data = parser_business.parse_args()
         newname = data['business_name']
@@ -190,7 +188,7 @@ class GetBusinessById(Resource):
             myBusiness[0].update_business(newname, newindustry, newlocation, newemail, newabout)
             return {"message": "Business succcessfully updated!", }, 201
 class BusinessReview(Resource):
-    @swag_from('doc/post_review_business.yml')
+    @swag_from('docs/post_review_business.yml')
     def post(self, business_id):
         data = parser_review.parse_args()
         review = data['review']
@@ -203,7 +201,7 @@ class BusinessReview(Resource):
             reviews.append(new_review)
             response = {"Business Review": "{}".format(data['review'])}
             return response, 201
-    @swag_from('doc/get_business_review.yml')       
+    @swag_from('docs/get_business_review.yml')       
     def get(self, business_id):
         myReviews = [{x.review_id:[x.review] for x in reviews}]
         return {'Reviews': myReviews}, 200

@@ -1,7 +1,6 @@
 #app/__init__.py
 #Flask class from flask module
 import os
-import sys
 import inspect
 from flask import Flask, redirect, Blueprint
 from flasgger import Swagger
@@ -36,14 +35,11 @@ app.config['SWAGGER'] = {
     ]
 }
 
-Swagger(app)
+swag = Swagger(app)
 # Add Blueprint; how to construct or extend the app
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp, prefix="/api/v1")
 
-# Add Blueprint; how to construct or extend the app
-api_bp = Blueprint('api', __name__)
-api = Api(api_bp, prefix="/api/v1")
 
 
 from app import routes
