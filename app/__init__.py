@@ -1,68 +1,26 @@
-#app/__init__.py
-#Flask class from flask module
-import os
-import sys
-import inspect
-from flask import Flask, redirect, Blueprint
-from flasgger import Swagger
-from flask_restful import Api
+# app/__init__.py
 
-app = Flask(__name__)
-app.config['SWAGGER'] = {
-    'swagger': '2.0',
-    'title': 'WeConnect API',
-    'description': "This API gives users opportunity to create, review business",
-    'basePath': '',
-    'version': '1',
-    'contact': {
-                'Developer': 'stephen Ogolla',
-                'Profile': 'https://github.com/Ogollah'
-    },
-    'license': {
-    },
-    'tags': [
-        {
-            'name': 'User',
-                    'description': 'The API user'
-        },
-        {
-            'name': 'Business',
-                    'description': 'A business can be added, updated, reviewed or deleted by a user'
-        },
-        {
-            'name': 'Review',
-                    'description': 'Review can be created and viewed'
-        },
-    ]
-}
+from flask_api import FlaskAPI
+from flask_jwt_extended import JWTManager
 
-Swagger(app)
-# Add Blueprint; how to construct or extend the app
-api_bp = Blueprint('api', __name__)
-api = Api(api_bp, prefix="/api/v1")
-
-# Add Blueprint; how to construct or extend the app
-api_bp = Blueprint('api', __name__)
-api = Api(api_bp, prefix="/api/v1")
+# local import
+from instance.config import app_config
+from app.auth.views import blacklist
 
 
-from app import routes
-from app.models import business, review, user
+def create_app(config_name):
+    app = FlaskAPI(__name__, instance_relative_config=True)
+    app.config.from_object(app_config[config_name])
+    app.config.from_pyfile('config.py')
+    jwt = JWTManager(app)
 
-api.add_resource(routes.UserRegistration, '/user/auth/register')
-api.add_resource(routes.UserLogin, '/user/auth/login')
-api.add_resource(routes.UserLogout, '/user/auth/logout')
-api.add_resource(routes.UserResetPassword, '/user/auth/resetPassword')
-api.add_resource(routes.BusinessRegistration, '/business/registration')
-api.add_resource(routes.AllBusiness,'/business/businesses')
-api.add_resource(routes.GetBusinessById, '/business/<int:business_id>')
-api.add_resource(routes.BusinessReview , '/business/<int:business_id>/reviews')
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        jti = decrypted_token['jti']
+        return jti in blacklist
 
-app.register_blueprint(api_bp)
+    # import the authentication blueprint and register it on the app
+    from .auth import auth_blueprint
+    app.register_blueprint(auth_blueprint)
 
-@app.route('/')
-def main():
-    """Redirect to api endpoints"""
-    return redirect('/api/v1/')
-if __name__ == '__main__':
-    app.run()
+    return app

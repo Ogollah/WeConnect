@@ -1,108 +1,166 @@
-#app/tests/test_auth.py
 import unittest
 import json
-import app
-#authentication testcases
+from app import create_app
+
+
 class AuthTestCase(unittest.TestCase):
+    """Test case for the authentication blueprint."""
+
     def setUp(self):
-        app.app.testing = True
-        self.app = app.app.test_client()
-        self.data = {'username':'monu', 'email':'fra@mail.com', 'password':'test123'}
-        self.data_2 = {'username':'tito', 'email':'lawi@mail.com', 'password':'test123'}
-        self.data_3 = {'username':'ribo', 'email':'riwi@mail.com', 'password':'testtest'}
-        self.data_4 = {'username':'kiwi', 'email':'kiwi@mail.com', 'password':'sart'}
-        self.data_5 = {'username':'coso', 'email':'coso@mail.com', 'password':'small12'}
-        self.data_6 = {'username':'colo', 'email':'colo@mail.com', 'password':'jamu'}
-        self.data_7 = {'username': 'colo', 'email': 'colo@mail.com', 'password': 'jamu', 'new_pass': 'ioki'}
-        
+        """Set up test variables."""
+        self.app = create_app(config_name="testing")
+        # initialize the test client
+        self.client = self.app.test_client
+        # This is the user test json data with a predefined username, email and password
+        self.user_data = {
+            'username': 'testexample',
+            'user_email': 'test@example.com',
+            'password': 'test_123'
+        }
+        self.user_data_2 = {
+            'username': 'example',
+            'user_email': 'example@example.com',
+            'password': 'test_123'
+        }
+        self.user_data_4 = {
+            'username': 'exam',
+            'user_email': 'exam@example.com',
+            'password': 'test_12356'
+        }
 
-    def test_user_registration(self):
-        """Test user can register for account."""
-        responce = self.app.post('/api/v1/user/auth/register', data=self.data_2)
-        result = json.loads(responce.data.decode())
-        self.assertEqual(responce.status_code, 201)
-        self.assertEqual(result['message'], 'User {} created successfully'. format(self.data_2['username']))
+        self.user_data_5 = {
+            'username': 'sammy',
+            'user_email': 'sammy@example.com',
+            'password': 'sammy_12356'
+        }
 
-    def test_user_already_registered(self):
-        """Test user can only register once. """     
-        response = self.app.post('/api/v1/user/auth/register', data=self.data)
-        self.assertEqual(response.status_code, 201)
-        second_response = self.app.post('/api/v1/user/auth/register', data=self.data)
-        self.assertEqual(second_response.status_code, 202)
+        self.user_data_6 = {
+            'username': 'lookman',
+            'user_email': 'looky@example.com',
+            'password': 'testexample'
+        }
+
+        self.user_data_7 = {
+            'username': 'kazi',
+            'user_email': 'looky@example.com',
+            'password': 'testexample'
+        }
+
+    def test_registration(self):
+        """Test user registration works correcty."""
+        res = self.client().post('/api/v1/auth/register', data=self.user_data)
         # get the results returned in json format
-        result = json.loads(second_response.data.decode())
-        self.assertEqual(result['message'], 'Username {} already taken'.format(self.data['username']))
+        result = json.loads(res.data.decode())
+        # assert that the request contains a success message and a 201 status code
+        self.assertEqual(result['message'],
+                         "Your account was succesfully created.")
+        self.assertEqual(res.status_code, 201)
+
+    def test_already_registered_user(self):
+        """Test that a user cannot be registered twice."""
+        res = self.client().post('/api/v1/auth/register', data=self.user_data_2)
+        self.assertEqual(res.status_code, 201)
+        second_res = self.client().post('/api/v1/auth/register', data=self.user_data_2)
+        self.assertEqual(second_res.status_code, 202)
+        # get the results returned in json format
+        result = json.loads(second_res.data.decode())
+        self.assertEqual(
+            result['message'], "User with this username already exists kindly try another one!.")
 
     def test_user_login(self):
         """Test registered user can login."""
-        login_result = self.app.post('/api/v1/user/auth/login', data=self.data)
+        res = self.client().post('/api/v1/auth/register', data=self.user_data_4)
+        self.assertEqual(res.status_code, 201)
+        login_res = self.client().post('/api/v1/auth/login', data=self.user_data_4)
         # get the results in json format
-        result = json.loads(login_result.data.decode())
+        result = json.loads(login_res.data.decode())
         # Test that the response contains success message
-        self.assertEqual(result['message'], 'User {} logged in successfully'.format(self.data['username']))
+        self.assertEqual(result['message'],
+                         "You have successfully logged in!.")
         # Assert that the status code is equal to 200
-        self.assertEqual(login_result.status_code, 202)
+        self.assertEqual(login_res.status_code, 200)
+        self.assertTrue(result['access_token'])
 
-    def test_non_registered_user(self):
-        """Test non register user cannot login"""
-        response = self.app.post('/api/v1/user/auth/register', data=self.data_3)
-        self.assertEqual(response.status_code, 201)
-        non_user = {
-            'username':'non',
-            'password':'not-applicable'
+    def test_non_registered_user_login(self):
+        """Test non registered users cannot login."""
+        # define a dictionary to represent an unregistered user
+        not_a_user = {
+            'username': 'abela',
+            'password': 'nopekabisa'
         }
-        response = self.app.post('/api/v1/user/auth/login', data=non_user)
+        # send a POST request to /auth/login with the data above
+        res = self.client().post('/api/v1/auth/login', data=not_a_user)
         # get the result in json
-        result = json.loads(response.data.decode())
-        # assert that this response must contain an error message 
-        # and an error status code 401(Unauthorized)
-        self.assertEqual(response.status_code, 401)       
-        self.assertEqual(result['message'], "Invalid username or password, Please try again")
-
-    
-    def test_user_wrong_password(self):
-        """Test registered user cannot login with a wrong password"""
-        response = self.app.post('/api/v1/user/auth/register', data=self.data_4)
-        self.assertEqual(response.status_code, 201)
-
-        user_no_pass = {
-            'username': 'kiwi',
-            'email': 'kiwi@mail.com',
-            'password': 'not-applicable'
-        }
-
-        response = self.app.post('/api/v1/user/auth/login', data=user_no_pass)
-        # get the result in json
-        result = json.loads(response.data.decode())
-
+        result = json.loads(res.data.decode())
         # assert that this response must contain an error message
         # and an error status code 401(Unauthorized)
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(result['message'], "Invalid username or password, Please try again")
-
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(
+            result['message'], "Invalid username or password, Please try again!")
 
     def test_user_logout(self):
-        """Test user can logout the account. """
-        response = self.app.post('/api/v1/user/auth/register', data=self.data_5)
-        self.assertEqual(response.status_code, 201)
-        response = self.app.post('/api/v1/user/auth/login', data=self.data_5)
-        response = self.app.post('/api/v1/user/auth/logout', data=self.data_5)
-        # get the result in json
-        result = json.loads(response.data.decode())
-        # and an error status code 200
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(result['message'], "Logged out successfully")
+        """Test registered user can logout."""
+        res = self.client().post('/api/v1/auth/register', data=self.user_data_5)
+        self.assertEqual(res.status_code, 201)
+        login_res = self.client().post('/api/v1/auth/login', data=self.user_data_5)
+        self.assertEqual(login_res.status_code, 200)
+        #Define header dictionary
+        access_token = json.loads(login_res.data.decode())['access_token']
+        logout_res = self.client().post('/api/v1/auth/logout',
+                                        headers=dict(Authorization='Bearer ' + access_token), data=self.user_data_5)
+        # get the results in json format
+        result = json.loads(logout_res.data.decode())
+        # Test that the response contains success message
+        self.assertEqual(result["message"], "You have successfully logged out")
+        # Assert that the status code is equal to 200
+        self.assertEqual(logout_res.status_code, 200)
 
-    def test_user_reset_password(self):
-        """Test user can reset password. """
-        response = self.app.post('/api/v1/user/auth/register', data=self.data_6)
-        self.assertEqual(response.status_code, 201)
-        response = self.app.post('/api/v1/user/auth/login', data=self.data_6)
-        self.assertEqual(response.status_code, 202)
-        response = self.app.post('/api/v1/user/auth/resetPassword', data=self.data_7)
-        #get the result in json
-        result = json.loads(response.data.decode())
-        # status code 200
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(result['message'], "Password reset successfully")
+    def test_user_can_reset_password(self):
+        """Test user can change there password given correct credentials."""
+        res = self.client().post('/api/v1/auth/register', data=self.user_data_6)
+        self.assertEqual(res.status_code, 201)
+        login_res = self.client().post('/api/v1/auth/login', data=self.user_data_6)
+        self.assertEqual(login_res.status_code, 200)
+        #Define header dictionary
+        access_token = json.loads(login_res.data.decode())['access_token']
+        reset_password = {
+            "username": "lookman",
+            "old_password": "testexample",
+            "new_password": "123456"
+        }
+        reset_res = self.client().post('/api/v1/auth/reset_password',
+                                       headers=dict(Authorization='Bearer ' + access_token), data=reset_password)
+        # get the results in json format
+        result = json.loads(reset_res.data.decode())
+        # Test that the response contains success message
+        self.assertEqual(result["message"],
+                         "You have successfully reset your password.")
+        # Assert that the status code is equal to 200
+        self.assertEqual(reset_res.status_code, 200)
 
+    def test_user_cannot_reset_password_with_invalid_credential(self):
+        """Test user cannot change there password given incorrect credentials."""
+        res = self.client().post('/api/v1/auth/register', data=self.user_data_7)
+        self.assertEqual(res.status_code, 201)
+        login_res = self.client().post('/api/v1/auth/login', data=self.user_data_7)
+        self.assertEqual(login_res.status_code, 200)
+        #Define header dictionary
+        access_token = json.loads(login_res.data.decode())['access_token']
+        reset_password = {
+            "username": "kazi",
+            "old_password": "exampletest",
+            "new_password": "123456"
+        }
+        reset_res = self.client().post('/api/v1/auth/reset_password',
+                                       headers=dict(Authorization='Bearer ' + access_token), data=reset_password)
+        # get the results in json format
+        result = json.loads(reset_res.data.decode())
+        # Test that the response contains a message
+        self.assertEqual(result["message"],
+                         "Wrong password or username")
+        # Assert that the status code is equal to 401
+        self.assertEqual(reset_res.status_code, 401)
+
+
+if __name__ == '__main__':
+    unittest.main()
